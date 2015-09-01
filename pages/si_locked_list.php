@@ -1,4 +1,4 @@
-
+﻿
 <form class="heads" method="POST" action="<?php echo $_SERVER['PHP_SELF']."?menu_marker=si_locked_list" ?>">
 <?php
 $time=time();
@@ -21,7 +21,7 @@ $sort_field=(! empty($_GET['sort_field'])) ? $_GET['sort_field'] : $LDAP_CHANGED
 
 <?php
 if($BLOCK_VIS[$menu_marker]['birthdays'])
-	include("./libs/birth.php");
+	include("./libs/birth_locked.php");
 if($BLOCK_VIS[$menu_marker]['search'])	
 	include("./libs/search.php");
 if($BLOCK_VIS[$menu_marker]['profile'])	
@@ -39,6 +39,7 @@ $LdapListAttrs = array($LDAP_DISTINGUISHEDNAME_FIELD, $DisplayName,
   		$LDAP_MAIL_FIELD, 
   		$LDAP_INTERNAL_PHONE_FIELD,
   		$LDAP_CITY_PHONE_FIELD,
+		$LDAP_BIRTH_FIELD,
   		$LDAP_ST_DATE_VACATION_FIELD,
   		$LDAP_END_DATE_VACATION_FIELD,
   		$LDAP_TITLE_FIELD,
@@ -49,8 +50,7 @@ $LdapListAttrs = array($LDAP_DISTINGUISHEDNAME_FIELD, $DisplayName,
   		$LDAP_DEPUTY_FIELD,
   		$LDAP_GUID_FIELD,
   		$LDAP_USERPRINCIPALNAME_FIELD,
-  		$LDAP_CHANGED_DATE_FIELD,
-  		$LDAP_ROOM_NUMBER_FIELD);
+  		$LDAP_CHANGED_DATE_FIELD);
 
 
 // Делаем фильтр для выборки сотрудников
@@ -102,25 +102,18 @@ if(is_array($Staff))
 													    'url_vars' => $url_vars
 													    ),
 										 ));
-	echo Application::getCollTitle($L->l('email'), 
-									array(
-										'sort' => array(
-													    'field' => $LDAP_MAIL_FIELD,
-													    'order' => $sort_order,
-													    'sorted_field' => $sort_field,
-													    'url_vars' => $url_vars
-													    ),
-										 ) );	
+if(!$HIDE_ROOM_NUMBER)
+	echo "<th><div>".$L->l('room_number')."</div></th>";
 
-	echo Application::getCollTitle($L->l('room_number'), 
+	echo Application::getCollTitle($L->l('birthday'), 
 									array(
 										'sort' => array(
-													    'field' => $LDAP_ROOM_NUMBER_FIELD,
+													    'field' => $$LDAP_BIRTH_FIELD,
 													    'order' => $sort_order,
 													    'sorted_field' => $sort_field,
 													    'url_vars' => $url_vars
 													    ),
-										 ) );
+										 ));
 	echo Application::getCollTitle($L->l('intrenal_phone'), 
 									array(
 										'sort' => array(
@@ -130,7 +123,6 @@ if(is_array($Staff))
 													    'url_vars' => $url_vars
 													    ),
 										 ) );	
-
 	if(!$HIDE_CITY_PHONE_FIELD)
 		echo Application::getCollTitle($L->l('city_phone'), 
 										array(
@@ -141,6 +133,17 @@ if(is_array($Staff))
 														    'url_vars' => $url_vars
 														    ),
 											 ) );
+if(!$HIDE_HOMEPHONE_FIELD)
+	echo Application::getCollTitle($L->l('home_phone'), 
+		array(
+		'sort' => array(
+			    'field' => $LDAP_HOMEPHONE_FIELD,
+			    'order' => $sort_order,
+			    'sorted_field' => $sort_field,
+			    'url_vars' => $url_vars
+						    ),
+						 ) );
+
 	if(!$HIDE_CELL_PHONE_FIELD)
 		echo Application::getCollTitle($L->l('cell_phone'), 
 										array(
@@ -150,7 +153,18 @@ if(is_array($Staff))
 														    'sorted_field' => $sort_field,
 														    'url_vars' => $url_vars
 														    ),
-											 ) );											 		
+											 ) );										
+	echo Application::getCollTitle($L->l('email'), 
+									array(
+										'sort' => array(
+													    'field' => $LDAP_MAIL_FIELD,
+													    'order' => $sort_order,
+													    'sorted_field' => $sort_field,
+													    'url_vars' => $url_vars
+													    ),
+										 ) );	
+
+	 		
 
 	if(Staff::showComputerName($Login)) //Если сотрудник является администратором справочника
 		echo Application::getCollTitle("Компьютер", 

@@ -1,5 +1,5 @@
 <?php
-require_once('../libs/MPDF54/mpdf.php');
+require_once('../libs/MPDF60/mpdf.php');
 require_once('../config.php');
 require_once("../libs/forms.php");
 require_once("../libs/staff.php");
@@ -28,7 +28,7 @@ if($ENABLE_PDF_EXPORT)
 	else
 		$DisplayName=$LDAP_NAME_FIELD;	
 
-	$Staff=$ldap->getArray($OU, "(&".$CompanyNameLdapFilter."(".$LDAP_CN_FIELD."=*)".$DIS_USERS_COND.")", array($DisplayName, $LDAP_MAIL_FIELD, $LDAP_INTERNAL_PHONE_FIELD, $LDAP_CITY_PHONE_FIELD, $LDAP_TITLE_FIELD, $LDAP_DEPARTMENT_FIELD, $LDAP_CELL_PHONE_FIELD), array($DisplayName, array('ad_def_full_name')));
+	$Staff=$ldap->getArray($OU, "(&".$CompanyNameLdapFilter."(".$LDAP_CN_FIELD."=*)".$DIS_USERS_COND.")", array($DisplayName, $LDAP_MAIL_FIELD, $LDAP_INTERNAL_PHONE_FIELD, $LDAP_CITY_PHONE_FIELD, $LDAP_BIRTH_FIELD, $LDAP_TITLE_FIELD, $LDAP_DEPARTMENT_FIELD, $LDAP_CELL_PHONE_FIELD), array($DisplayName, array('ad_def_full_name')));
 
 	if(is_array($Staff))
 		{
@@ -43,13 +43,13 @@ if($ENABLE_PDF_EXPORT)
 				$Name="";
 				$Patronymic="";
 				
-				if(preg_match("/[ЁA-ZА-Я]{1}[ёa-zа-я-]+[\s]{1}[ЁA-ZА-Я]{1}[ёa-zа-я-]+[\s]{1}[ЁA-ZА-Я]{1}[ёa-zа-я-]+/u", $Staff[$DisplayName][$i]))
+				if(preg_match("/[ІЇЄЁA-ZА-Я]{1}[іїєёa-zа-я-]+[\s]{1}[ІЇЄЁA-ZА-Я]{1}[іїєёa-zа-я-]+[\s]{1}[ІЇЄЁA-ZА-Я]{1}[іїєёa-zа-я-]+/u", $Staff[$DisplayName][$i]))
 					{
 					$Surname=$FIO[0];
 					$Name=$FIO[1];
 					$Patronymic=$FIO[2];
 					}
-				if(preg_match("/[ЁA-ZА-Я]{1}[ёa-zа-я-]+[\s]{1}[ЁA-ZА-Я]{1}[.]{1}[\s]{1}[ЁA-ZА-Я]{1}[ёa-zа-я-]+/u", $Staff[$DisplayName][$i]))
+				if(preg_match("/[ІЇЄЁA-ZА-Я]{1}[іїєёa-zа-я-]+[\s]{1}[ІЇЄЁA-ZА-Я]{1}[.]{1}[\s]{1}[ІЇЄЁA-ZА-Я]{1}[іїєёa-zа-я-]+/u", $Staff[$DisplayName][$i]))
 					{
 					$Surname=$FIO[2];
 					$Name=$FIO[0];
@@ -70,16 +70,17 @@ if($ENABLE_PDF_EXPORT)
 
 				$html.="<tr>
 				<td class=\"name\"><span class=\"surname\">".$Surname."</span><br><span class=\"patronymic\">".$Name." ".$Patronymic."</span></td>";
-				if(!$HIDE_CELL_PHONE_FIELD)	
-					$html.="<td class=\"cell_phone\">".Staff::makeCellPhone($Staff[$LDAP_CELL_PHONE_FIELD][$i], false)."</td>";
 
+$html.="<td class=\"position\">".Staff::makeTitle($Staff[$LDAP_TITLE_FIELD][$i])."</td> </tr>";
+$html.="<td class=\"birth\">".Staff::makeBirth($Staff[$LDAP_BIRTH_FIELD][$i])."</td> </tr>";
+$html.="<td class=\"internal_phone\">".Staff::makeInternalPhone($Staff[$LDAP_INTERNAL_PHONE_FIELD][$i], false)."</td> </tr>";
 				if(!$HIDE_CITY_PHONE_FIELD)		
 					$html.="<td class=\"city_phone\">".Staff::makeCityPhone($Staff[$LDAP_CITY_PHONE_FIELD][$i], false)."</td>";
-				
+				if(!$HIDE_CELL_PHONE_FIELD)	
+					$html.="<td class=\"cell_phone\">".Staff::makeCellPhone($Staff[$LDAP_CELL_PHONE_FIELD][$i], false)."</td>";
+			
 				$html.="
-				<td class=\"internal_phone\">".Staff::makeInternalPhone($Staff[$LDAP_INTERNAL_PHONE_FIELD][$i], false)."</td>
 				<td class=\"mail\">".$Staff[$LDAP_MAIL_FIELD][$i]."</td>
-				<td class=\"position\">".Staff::makeTitle($Staff[$LDAP_TITLE_FIELD][$i])."</td>
 				</tr>
 				";		
 				}

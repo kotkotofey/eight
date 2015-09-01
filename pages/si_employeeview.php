@@ -33,13 +33,16 @@ if($USE_DISPLAY_NAME)
 	$Name=$ldap->getValue($dn, $DISPLAY_NAME_FIELD);
 else
 	$Name=$ldap->getValue($dn, "name");
-
+/*---------------------------------------*/
 
 $control=$ldap->getValue($dn, "useraccountcontrol");
 $LockedCssClass= ((($control & 2)==2)||(($control & 2) == 16))?"locked":"";
 
-$FIO=preg_replace("/^([ёA-zА-я-]+)[\s]{1}([ёA-zА-я-]+[\s]{1}[ёA-zА-я-]+)$/u", "<div class=\"surname_head ".$LockedCssClass."\">$1</div><div class=\"name ".$LockedCssClass."\">$2</div>", $Name);
-$FIO=preg_replace("/^([ёA-zА-я-]+[\s]{1}[ёA-zА-я-]{1}.)[\s]{1}([ёA-zА-я-]+)$/u", "<div class=\"surname_head ".$LockedCssClass."\">$2</div><div class=\"name ".$LockedCssClass."\">$1</div>", $FIO);
+$FIO=preg_replace("/^([іІєЄїЇёёA-zА-я-]+)[\s]{1}([іІєЄїЇёёA-zА-я-]+[\s]{1}[іІєЄїЇёёA-zА-я-]+)$/u", "<div class=\"surname_head ".$LockedCssClass."\">$1</div><div class=\"name ".$LockedCssClass."\">$2</div>", $Name);
+$FIO=preg_replace("/^([іІєЄїЇёёA-zА-я-]+[\s]{1}[іІєЄїЇёёA-zА-я-]{1}.)[\s]{1}([іІєЄїЇёёA-zА-я-]+)$/u", "<div class=\"surname_head ".$LockedCssClass."\">$2</div><div class=\"name ".$LockedCssClass."\">$1</div>", $FIO);
+ 
+//$FIO=preg_replace("/^([іІєЄїЇёёA-zА-я-]+)[\s]{1}([іІєЄїЇёёA-zА-я-]+[\s]{1}[іІєЄїЇёёA-zА-я-]+)$/u", "<div class=\"surname_head\">$1</div><div class=\"name\">$2</div>", $Name);
+//$FIO=preg_replace("/^([іІєЄїЇёёA-zА-я-]+[\s]{1}[іІєЄїЇёёA-zА-я-]{1}.)[\s]{1}([іІєЄїЇёёA-zА-я-]+)$/u", "<div class=\"surname_head\">$2</div><div class=\"name\">$1</div>", $FIO);
 
 echo $FIO;
 
@@ -49,7 +52,7 @@ if($SHOW_EVALUATION_PERIOD_MESSAGE && $LDAP_CREATED_DATE_FIELD)
 	$CreatedUnixTime=Time::getTimeOfDMYHI($Created, $LDAP_CREATED_DATE_FORMAT);
 	$NumWorkDays=round((Time::getOnlyDatePartFromTime(time())-Time::getOnlyDatePartFromTime($CreatedUnixTime))/(24*60*60));
 	if($NumWorkDays<=$EVALUATION_PERIOD)
-		echo "<h6 class=\"alarm\">Новый сотрудник</h6> &mdash; <small>работает в компании <big>".$L->ending($NumWorkDays, 'день', 'дня', 'дней')."</big></small>";
+		echo "<h6 class=\"alarm\">Новий співробітник</h6> &mdash; <small>працює  <big>".$L->ending($NumWorkDays, 'день', 'дня', 'днів')."</big></small>";
 	}
 
 $Department=$ldap->getValue($dn, $LDAP_DEPARTMENT_FIELD);
@@ -91,11 +94,9 @@ if(!$HIDE_CELL_PHONE_FIELD)
 if($HomePhone=$ldap->getValue($dn, $LDAP_HOMEPHONE_FIELD))
 	echo "<div class=\"otherphone\"><h6>".$L->l('home_phone').":</h6> ".Staff::makeHomePhone($HomePhone)."</div>";
 
+echo "<div class=\"email\"><h6>E-mail:</h6> ".Staff::makeMailUrl($ldap->getValue($dn, $LDAP_MAIL_FIELD))."</div>";
 if(!$HIDE_ROOM_NUMBER)
 	echo "<div class=\"otherphone\"><h6>".$L->l('room_number').":</h6> ".Staff::makePlainText($ldap->getValue($dn, $LDAP_ROOM_NUMBER_FIELD))."</div>";
-
-echo "<div class=\"email\"><h6>E-mail:</h6> ".Staff::makeMailUrl($ldap->getValue($dn, $LDAP_MAIL_FIELD))."</div>";
-
 
 
 $StDate=$ldap->getValue($dn, $LDAP_ST_DATE_VACATION_FIELD);

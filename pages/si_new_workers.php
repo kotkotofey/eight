@@ -22,6 +22,8 @@ $LdapListAttrs = array($LDAP_DISTINGUISHEDNAME_FIELD, $DisplayName,
   		$LDAP_MAIL_FIELD, 
   		$LDAP_INTERNAL_PHONE_FIELD,
   		$LDAP_CITY_PHONE_FIELD,
+		$LDAP_HOMEPHONE_FIELD,
+		$LDAP_BIRTH_FIELD,
   		$LDAP_ST_DATE_VACATION_FIELD,
   		$LDAP_END_DATE_VACATION_FIELD,
   		$LDAP_TITLE_FIELD,
@@ -32,8 +34,8 @@ $LdapListAttrs = array($LDAP_DISTINGUISHEDNAME_FIELD, $DisplayName,
   		$LDAP_DEPUTY_FIELD,
   		$LDAP_GUID_FIELD,
   		$LDAP_CREATED_DATE_FIELD,
-        $LDAP_USERPRINCIPALNAME_FIELD,
-        $LDAP_ROOM_NUMBER_FIELD);
+        	$LDAP_USERPRINCIPALNAME_FIELD,
+        	$LDAP_ROOM_NUMBER_FIELD);
 
 //Получаем правильно отсортированных сотрудников с необходимыми атрибутами LDAP
 $Staff=$ldap->getArray($OU,
@@ -47,17 +49,24 @@ if(is_array($Staff))
 	//-------------------------------------------------------------------------------------------------------------
 	echo "
 		<table class=\"sqltable\" cellpadding=\"4\">
-		<th><div>ФИО</div></th>
-		<th><div>Должность</div></th>
-		<th><div>E-mail</div></th>
+		<th><div>".$L->l('full_name')."</div></th>
+		<th><div>".$L->l('position')."</div></th>
 		";
 	if(!$HIDE_ROOM_NUMBER)
 		echo "<th><div>".$L->l('room_number')."</div></th>";
-	echo "<th><div>".$L->l('intrenal_phone')."</div></th>";	
+	if(!$HIDE_BIRTHDAY_FIELD)
+		echo "<th><div>".$L->l('birthday')."</div></th>";
+	if(!$HIDE_INTERNAL_PHONE_FIELD)
+		echo "<th><div>".$L->l('intrenal_phone')."</div></th>";
 	if(!$HIDE_CITY_PHONE_FIELD)
-		echo "<th><div>".$L->l('city_phone')."</div></th>";	
+		echo "<th><div>".$L->l('city_phone')."</div></th>";
+	if(!$HIDE_HOMEPHONE_FIELD)
+		echo "<th><div>".$L->l('home_phone')."</div></th>";		
 	if(!$HIDE_CELL_PHONE_FIELD)
 		echo "<th><div>".$L->l('cell_phone')."</div></th>";
+
+		echo "<th><div>".$L->l('email')."</div></th>";
+
 	if(Staff::showComputerName($Login)) //Если сотрудник является администратором справочника
 		echo "<th><div>Компьютер</div></th>";
     if($GLOBALS['XMPP_ENABLE'] && $GLOBALS['XMPP_MESSAGE_LISTS_ENABLE'] && !empty($_COOKIE['dn']))  

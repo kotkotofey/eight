@@ -35,6 +35,11 @@ if($Access)
 			$Errors[$LDAP_CITY_PHONE_FIELD]=$_POST[$LDAP_CITY_PHONE_FIELD];
 		else
 			$info[$LDAP_CITY_PHONE_FIELD]=$_POST[$LDAP_CITY_PHONE_FIELD];	
+
+		if(($RE_HOMEPHONE_NUMBER)&&(!preg_match("/".$RE_HOMEPHONE_NUMBER."/", $_POST[$LDAP_HOMEPHONE_FIELD])))
+			$Errors[$LDAP_HOMEPHONE_FIELD]=$_POST[$LDAP_HOMEPHONE_FIELD];
+		else
+			$info[$LDAP_HOMEPHONE_FIELD]=$_POST[$LDAP_HOMEPHONE_FIELD];	
 		
 		
 		if(($RE_MOBILE)&&(!preg_match("/".$RE_MOBILE."/", $_POST[$LDAP_CELL_PHONE_FIELD])))
@@ -121,6 +126,7 @@ if($Access)
 		$table->addColumn($LDAP_MAIL_FIELD, "E-mail", true);
 		$table->addColumn($LDAP_INTERNAL_PHONE_FIELD, $L->l('intrenal_phone'), true);
 		$table->addColumn($LDAP_CITY_PHONE_FIELD, $L->l('city_phone'), true);
+		$table->addColumn($LDAP_HOMEPHONE_FIELD, $L->l('home_phone'), true);
 		$table->addColumn($LDAP_CELL_PHONE_FIELD, "Мобильный", true);		
 		$table->addColumn($LDAP_BIRTH_FIELD, "Д.Р.", true, 0, false, "dd.mm.yyyy");
 		$table->addColumn($LDAP_PHOTO_FIELD, "Фото", true);	
@@ -144,9 +150,9 @@ if($Access)
 	//-------------------------------------------------------------------------------------------------	
 	if($USE_DISPLAY_NAME)
 		{
-		$table->addPregReplace("/([ёA-zА-я-]+)[\s]{1}([ёA-zА-я-]+[\s]{1}[ёA-zА-я-]+)(CN.*)/u", "<a href=\"newwin.php?menu_marker=si_employeeview&dn=\\3\" data-lightview-type=\"iframe\" data-lightview-options=\"width: '80%', height: '100%', keyboard: {esc: true}, skin: 'light'\" class=\"lightview\"><div class='surname'>\\1</div>\\2</a>", "ФИО", 1, $Conditions1);
-		$table->addPregReplace("/([ёA-zА-я-]+[\s]{1}[ёA-zA-я]{1}.)[\s]{1}([ёA-zА-я-]+)(CN.*)/u", "<a href=\"newwin.php?menu_marker=si_employeeview&dn=\\3\" data-lightview-type=\"iframe\" data-lightview-options=\"width: '80%', height: '100%', keyboard: {esc: true}, skin: 'light'\" class=\"lightview\"><div class='surname'>\\2</div>\\1</a>", "ФИО", 1, $Conditions1);
-		$table->addPregReplace("/([ёA-zA-я0-1\s-]{1,})(CN.*)/u", "<a href=\"newwin.php?menu_marker=si_employeeview&dn=\\2\" data-lightview-type=\"iframe\" data-lightview-options=\"width: '80%', height: '100%', keyboard: {esc: true}, skin: 'light'\" class=\"lightview\"><div class='surname'>\\1</div></a>", "ФИО", 1, $Conditions1);
+		$table->addPregReplace("/([іІєЄїЇёA-zА-я-]+)[\s]{1}([іІєЄїЇёA-zА-я-]+[\s]{1}[іІєЄїЇёA-zА-я-]+)(CN.*)/u", "<a href=\"newwin.php?menu_marker=si_employeeview&dn=\\3\" data-lightview-type=\"iframe\" data-lightview-options=\"width: '80%', height: '100%', keyboard: {esc: true}, skin: 'light'\" class=\"lightview\"><div class='surname'>\\1</div>\\2</a>", "ФИО", 1, $Conditions1);
+		$table->addPregReplace("/([іІєЄїЇёA-zА-я-]+[\s]{1}[іІєЄїЇёA-zA-я]{1}.)[\s]{1}([іІєЄїЇёA-zА-я-]+)(CN.*)/u", "<a href=\"newwin.php?menu_marker=si_employeeview&dn=\\3\" data-lightview-type=\"iframe\" data-lightview-options=\"width: '80%', height: '100%', keyboard: {esc: true}, skin: 'light'\" class=\"lightview\"><div class='surname'>\\2</div>\\1</a>", "ФИО", 1, $Conditions1);
+		$table->addPregReplace("/([іІєЄїЇёA-zA-я0-1\s-]{1,})(CN.*)/u", "<a href=\"newwin.php?menu_marker=si_employeeview&dn=\\2\" data-lightview-type=\"iframe\" data-lightview-options=\"width: '80%', height: '100%', keyboard: {esc: true}, skin: 'light'\" class=\"lightview\"><div class='surname'>\\1</div></a>", "ФИО", 1, $Conditions1);
 		$table->addPregReplace("/^(CN.*)$/u", "<a href=\"newwin.php?menu_marker=si_employeeview&dn=\\1\" data-lightview-type=\"iframe\" data-lightview-options=\"width: '80%', height: '100%', keyboard: {esc: true}, skin: 'light'\" class=\"lightview\"><div class='surname'>x</div></a>", "ФИО", 1, $Conditions1);
 		
 		
@@ -160,10 +166,10 @@ if($Access)
 		}
 	else
 		{
-		$table->addPregReplace("/^[A-Za-z]+=*([ёА-яA-z0-1\s-.]+),[\S\s]+$/eu", "'<a href=\"newwin.php?menu_marker=si_employeeview&dn='.'\\0'.'\" data-lightview-type=\"iframe\" data-lightview-options=\"width: '80%', height: '100%', keyboard: {esc: true}, skin: 'light'\" class=\"lightview\">___\\1</a>'", "ФИО");
-		$table->addPregReplace("/___([ёA-zА-я-]+)[\s]{1}([ёA-zА-я-]+[\s]{1}[ёA-zА-я-]+)/u", "<div class='surname'>\\1</div>\\2", "ФИО");
+		$table->addPregReplace("/^[A-Za-z]+=*([іІєЄїЇёA-яA-z0-1\s-.]+),[\S\s]+$/eu", "'<a href=\"newwin.php?menu_marker=si_employeeview&dn='.'\\0'.'\" data-lightview-type=\"iframe\" data-lightview-options=\"width: '80%', height: '100%', keyboard: {esc: true}, skin: 'light'\" class=\"lightview\">___\\1</a>'", "ФИО");
+		$table->addPregReplace("/___([іІєЄїЇёA-zА-я-]+)[\s]{1}([іІєЄїЇёA-zА-я-]+[\s]{1}[іІєЄїЇёA-zА-я-]+)/u", "<div class='surname'>\\1</div>\\2", "ФИО");
 		//Для формата Имя О. Фамилия
-		$table->addPregReplace("/___([ёA-zА-я-]+[\s]{1}[ёA-zA-я]{1}.)[\s]{1}([ёA-zА-я-]+)/u", "<div class='surname'>\\2</div>\\1", "ФИО");		
+		$table->addPregReplace("/___([іІєЄїЇёA-zА-я-]+[\s]{1}[іІєЄїЇёA-zA-я]{1}.)[\s]{1}([іІєЄїЇёA-zА-я-]+)/u", "<div class='surname'>\\2</div>\\1", "ФИО");		
 		}
 	$table->addPregReplace("/([>]{1}[А-я\s.]*)(".strtolower(preg_quote($Name)).")([А-я\s.]*[<]{1})/u", "\\1<u class='found'>\\2</u>\\3", "ФИО", 1, $Conditions1);
 	$table->addPregReplace("/([>]{1}[А-я\s.]*)(".ucfirst(preg_quote($Name)).")([А-я\s.]*[<]{1})/u", "\\1<u class='found'>\\2</u>\\3", "ФИО", 1, $Conditions1);		
@@ -237,6 +243,18 @@ if($Access)
 		else
 			$table->addPregReplace("/([\w\W]{1,})/u", "<input class=\"text telephonenumber\" name=\"".$LDAP_CITY_PHONE_FIELD."\" value=\"\\1\"/>", $L->l('city_phone'), 1, $Conditions2);	
 		$table->addPregReplace("/value=\"x\"/u", "value=\"\"", $L->l('city_phone'), 1, $Conditions2);
+	//-------------------------------------------------------------------------------------------------	
+
+	//Домашний
+	//-------------------------------------------------------------------------------------------------		
+		$table->addPregReplace("/^([0-9]{3})([0-9]{3})$/u", "\\1-\\2", $L->l('home_phone'), 1, $Conditions1);
+		$table->addPregReplace("/(".preg_quote($Name).")/u", "<u class='found'>\\1</u>", $L->l('home_phone'), 1, $Conditions1);
+		$table->addPregReplace("/^$/u", "x", $L->l('home_phone'));
+		if(@$Errors[$LDAP_HOMEPHONE_FIELD])
+			$table->addPregReplace("/([\w\W]{1,})/u", "<span class=\"title\"><input class=\"error homenumber\" name=\"".$LDAP_HOMEPHONE_FIELD."\" value=\"".$Errors[$LDAP_HOMEPHONE_FIELD]."\"/><em>Новый домашний номер не соответствует формату. <br/>Действующие значение: <b> \\1 </b><i></i></em></span>", $L->l('home_phone'), 1, $Conditions2);
+		else
+			$table->addPregReplace("/([\w\W]{1,})/u", "<input class=\"text homenumber\" name=\"".$LDAP_HOMEPHONE_FIELD."\" value=\"\\1\"/>", $L->l('home_phone'), 1, $Conditions2);	
+		$table->addPregReplace("/value=\"x\"/u", "value=\"\"", $L->l('home_phone'), 1, $Conditions2);
 	//-------------------------------------------------------------------------------------------------	
 		
 	//Мобильный
