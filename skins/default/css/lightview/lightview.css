@@ -20,6 +20,15 @@
   text-align: left;
   -webkit-tap-highlight-color: rgba(0,0,0,0);
 }
+.lv_window, .lv_window [class^="lv_"],
+.lv_overlay, .lv_overlay [class^="lv_"],
+.lv_thumbnails, .lv_thumbnails [class^="lv_"],
+.lv_controls_top, .lv_controls_top [class^="lv_"],
+.lv_controls_top_close, .lv_controls_top_close [class^="lv_"] {
+  -moz-box-sizing: content-box;
+  -webkit-box-sizing: content-box;
+  box-sizing: content-box;
+}
 .lv_window,
 .lv_controls_top,
 .lv_controls_top_close,
@@ -680,7 +689,7 @@
 .lv_controls_top_close_skin_mac .lv_controls_top_close_button,
 .lv_thumbnails_skin_mac .lv_thumbnail_icon {
   background-image: url('skins/mac/sprite.png') !important;
-  background-image: url('skins/mac/sprite_ie_lt_7.png'); IE < 7
+  background-image: url('skins/mac/sprite_ie_lt_7.png'); /* IE < 7 */
 }
 
 /* close button */

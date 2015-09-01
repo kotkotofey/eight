@@ -1,11 +1,13 @@
-table
+table 
 	{
 	width: 100%;
+
+/*   border: 1px solid black;   */
 	}
 
 table tr td
 	{
-	vertical-align: top;
+	vertical-align: top; 
 	}
 
 #title
@@ -27,6 +29,8 @@ table tr td
 td.department	
 	{
 	font-size: 13pt;
+	padding-top: 15px;	
+	padding-left: 0px;
 	}
 div.department	
 	{
@@ -35,7 +39,9 @@ div.department
 
 td.name
 	{
-	width: 30%;
+	width: 25%;
+border-style: dashed;	
+padding-left: 3px;
 	}
 
 .surname
@@ -51,31 +57,52 @@ td.name
 
 td.internal_phone
 	{
+	width: 7%;
 	font-size: 9pt;
 	white-space:nowrap;
+	padding-left: 3px;
+	text-align: center;
 	}
 
 td.cell_phone
 	{
 	font-size: 9pt;
 	white-space:nowrap;
+	text-align: right;
 	}	
 td.mail
 	{
 	font-size: 9pt;
+	text-align: center;
 	}	
 
 td.city_phone
 	{
 	font-size: 9pt;
 	white-space:nowrap;
+	text-align: center;
+	}
+
+td.home_phone
+	{
+	font-size: 9pt;
+	white-space:nowrap;
+	text-align: center;
 	}
 
 td.position
 	{
-	width: 30%;
+	width: 17%;
 	font-size: 9pt;
-	padding-right: 0px;
+	padding-left: 3px;
+	}
+
+td.birth
+	{
+	width: 9%;
+	font-size: 8pt;
+	padding-right: 1px;
+	text-align: center;
 	}
 
 table.staff tr td
