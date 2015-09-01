@@ -1,5 +1,5 @@
 <?php
-//Выввод ближайших дней рождений
+//Выввод ближайших дней рождений уволенньіх сотрудников
 $time=time();
 if($NEAR_BIRTHDAYS) 
 	{	
@@ -78,7 +78,7 @@ if($NEAR_BIRTHDAYS)
 		{
 		$CompanyNameLdapFilter=Application::getCompanyNameLdapFilter();
 		
-		$B->printTable($OU, "(&".$CompanyNameLdapFilter."(|".$Dates.")".$DIS_USERS_COND.")");
+		$B->printTable($OU, "(&".$CompanyNameLdapFilter."(|".$Dates.")".$DIS_USERS_COND_LOCKED.")");
 		}
 
 	//Если необходимо ограничивать вывод строк с ближайшими днями рождения, то пишим в тело html-документа соответствующую информацию

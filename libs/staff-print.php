@@ -22,7 +22,7 @@ abstract class Staff
 		return self::makeNameUrlFromDn($Dn_and_name[$GLOBALS['LDAP_DISTINGUISHEDNAME_FIELD']][0], $Dn_and_name[$GLOBALS['DISPLAY_NAME_FIELD']][0]);
 		}*/
 
-	public static function getSurname($value)
+	public function getSurname($value)
 		{
 		if($GLOBALS['USE_DISPLAY_NAME'])
 			{
@@ -56,36 +56,15 @@ abstract class Staff
 			}	
 		return $DN;
 		}
-
-
-
-	
-//	public static function makeMailUrl($Mail)
-//		{
-//$parts = explode("@", $Mail); // добавлено для переноса емайлов 
-//$usernamemail = $parts[0] ."<br/>@" . $parts[1];
-//		if($Mail)
-//		return preg_replace("/([A-z0-9_\.\-]{1,20}@[A-z0-9\.\-]{1,20}\.[A-z]{2,4})/u", "<a href='mailto:\\1' class='in_link'>\\1</a>", $usernamemail);
-//		else
-//			return "x";
-//		}
 		
-	public static function makeMailUrl($Mail)//оригинал функции
+	public static function makeMailUrl($Mail)
 		{
 		if($Mail)
 			return preg_replace("/([A-z0-9_\.\-]{1,20}@[A-z0-9\.\-]{1,20}\.[A-z]{2,4})/u", "<a href='mailto:\\1' class='in_link'>\\1</a>", $Mail);
 		else
 			return "x";
 		}
-
-	public static function makePlainText($Var)
-		{
-		if($Var)
-			return $Var;
-		else
-			return "x";
-		}
-
+		
 
 	public static function makeDeputy($DN, $Title='')
 		{
@@ -368,8 +347,6 @@ abstract class Staff
 			$num++;
 		if(! $GLOBALS['HIDE_CELL_PHONE_FIELD'])
 			$num++;
-		if(! $GLOBALS['HIDE_ROOM_NUMBER'])
-			$num++;
 
 		if(empty($_COOKIE['dn']) && $GLOBALS['ENABLE_DANGEROUS_AUTH'])
 			$num++;
@@ -417,36 +394,18 @@ abstract class Staff
 			echo "<td>".self::makeTitle($Staff[$GLOBALS['LDAP_TITLE_FIELD']][$key])."</td>"; //Выводим должность
 		else
 			echo "<td>".self::highlightSearchResult(self::makeTitle($Staff[$GLOBALS['LDAP_TITLE_FIELD']][$key]), $Vars['search_str'])."</td>"; //Выводим должность
-/////////------------------------------
-	if($Vars['locked_date'])
-			echo "<td>".Time::modifyDateFormat(self::makeTitle($Staff[$GLOBALS['LDAP_CHANGED_DATE_FIELD']][$key]), $GLOBALS['LDAP_CHANGED_DATE_FORMAT'], "yyyy-mm-dd")."</td>"; //Выводим дату увольнения
 
-	if(!$GLOBALS['HIDE_ROOM_NUMBER'])
-		{
-		if(empty($Vars['search_str'])) //Если не велся поиск, то не подсвечивавем результаты	
-			echo "<td>".self::makePlainText($Staff[$GLOBALS['LDAP_ROOM_NUMBER_FIELD']][$key])."</td>"; //Выводим сотовый
-		else
-			echo "<td>".self::highlightSearchResult(self::makePlainText($Staff[$GLOBALS['LDAP_ROOM_NUMBER_FIELD']][$key]), $Vars['search_str'])."</td>"; //Делаем ссылку на полную информацию о сотруднике
-		}
+//		if(empty($Vars['search_str'])) //Если не велся поиск, то не подсвечивавем результаты
+//			echo "<td>".self::makeMailUrl($Staff[$GLOBALS['LDAP_MAIL_FIELD']][$key])."</td>"; //Выводим почту
+//		else
+//			echo "<td>".self::highlightSearchResult(self::makeMailUrl($Staff[$GLOBALS['LDAP_MAIL_FIELD']][$key]), $Vars['search_str'])."</td>"; 
 
 
-if(!$GLOBALS['HIDE_BIRTHDAY_FIELD'])
-		{
-echo "<td>".Time::modifyDateFormat(self::makeTitle($Staff[$GLOBALS['LDAP_BIRTH_FIELD']][$key]), $GLOBALS['LDAP_BIRTH_FIELD'], "dd.mm.yyyy")."</td>"; //Выводим день рождения
-		}
-
-echo "<td><".$tag.">".self::makeInternalPhone($Staff[$GLOBALS['LDAP_INTERNAL_PHONE_FIELD']][$key])."</".$tag."></td>"; //Выводим внутренний
-
-	if(!$GLOBALS['HIDE_CITY_PHONE_FIELD'])
-		{
-		echo "<td><".$tag.">".self::makeCityPhone($Staff[$GLOBALS['LDAP_CITY_PHONE_FIELD']][$key])."</".$tag."></td>"; //Выводим городской
-		}
-
-	if(!$GLOBALS['HIDE_HOMEPHONE_FIELD'])
-		{
-		echo "<td><".$tag.">".self::makeCityPhone($Staff[$GLOBALS['LDAP_HOMEPHONE_FIELD']][$key])."</".$tag."></td>"; //Выводим домашний
-		}
-
+		echo "<td><".$tag.">".self::makeInternalPhone($Staff[$GLOBALS['LDAP_INTERNAL_PHONE_FIELD']][$key])."</".$tag."></td>"; //Выводим внутренний
+		if(!$GLOBALS['HIDE_CITY_PHONE_FIELD'])
+			{
+			echo "<td><".$tag.">".self::makeCityPhone($Staff[$GLOBALS['LDAP_CITY_PHONE_FIELD']][$key])."</".$tag."></td>"; //Выводим городской
+			}
 
 		if(!$GLOBALS['HIDE_CELL_PHONE_FIELD'])
 			{
@@ -461,13 +420,7 @@ echo "<td><".$tag.">".self::makeInternalPhone($Staff[$GLOBALS['LDAP_INTERNAL_PHO
 		else
 			echo "<td>".self::highlightSearchResult(self::makeMailUrl($Staff[$GLOBALS['LDAP_MAIL_FIELD']][$key]), $Vars['search_str'])."</td>"; 
 
-//if(!$GLOBALS['HIDE_ROOM_NUMBER'])
-//			{
-//			if(empty($Vars['search_str'])) //Если не велся поиск, то не подсвечивавем результаты	
-//				echo "<td>".self::makePlainText($Staff[$GLOBALS['LDAP_ROOM_NUMBER_FIELD']][$key])."</td>"; //Выводим сотовый
-//			else
-//				echo "<td>".self::highlightSearchResult(self::makePlainText($Staff[$GLOBALS['LDAP_ROOM_NUMBER_FIELD']][$key]), $Vars['search_str'])."</td>"; //Делаем ссылку на полную информацию о сотруднике
-//			}
+
 
 		if(self::showComputerName($Vars['current_login'])) //Если сотрудник является администратором справочника
 			{
@@ -476,14 +429,8 @@ echo "<td><".$tag.">".self::makeInternalPhone($Staff[$GLOBALS['LDAP_INTERNAL_PHO
 			else
 				echo "<td>".self::highlightSearchResult(self::makeComputerName($Staff[$GLOBALS['LDAP_COMPUTER_FIELD']][$key]), $Vars['search_str'])."</td>"; //Выводим имя компьютера
 			}
-
-//		if( @$Staff[$GLOBALS['LDAP_CREATED_DATE_FIELD']][$key] ) 
-//			echo "<td>".Time::getHandyDateOfDMYHI($Staff[$GLOBALS['LDAP_CREATED_DATE_FIELD']][$key], $GLOBALS['LDAP_CREATED_DATE_FORMAT'], "yyyy-mm-dd")."</td>"; //Выводим дату принятия на работу
 		if( @$Staff[$GLOBALS['LDAP_CREATED_DATE_FIELD']][$key] ) 
-echo "<td>".Time::modifyDateFormat(self::makeTitle($Staff[$GLOBALS['LDAP_CREATED_DATE_FIELD']][$key]), $GLOBALS['LDAP_CREATED_DATE_FORMAT'], "yyyy-mm-dd")."</td>"; //Выводим дату принятия на работу
-
-
-
+			echo "<td>".Time::getHandyDateOfDMYHI($Staff[$GLOBALS['LDAP_CREATED_DATE_FIELD']][$key], $GLOBALS['LDAP_CREATED_DATE_FORMAT'])."</td>"; //Выводим дату принятия на работу
 
 		if($GLOBALS['XMPP_ENABLE'] && $GLOBALS['XMPP_MESSAGE_LISTS_ENABLE'] && $_COOKIE['dn'])
 			{
@@ -674,41 +621,6 @@ abstract class Application
 		$Window.="</ul></div>";
 		return $Window;
 		}
-
-/* добавлено из обсуждения http://www.pitin.su/news-161-0-376.htm
-Надо администратору отображать дату последней смены поролей сотрудниками.
-Хранится эта дата в поле pwdLastSet (тип Integer8).
-При выводе имеем на экране число вида 128492601054218750.
-Пока сам разобраться не смог, как его привести читаемому виду гггг-мм-чч.
-
-Игорь, прочитайте тут: http://samag.ru/archive/article/1688
-Ищите пункт "Тип данных object (VarType = 9)". Там пример листинга на VB. Может, поймете, как дальше скакать...
-
-Разобрался
-В staff.php добавил функция и пользую ее для вывода даты */
-
-public static function makeDate($Val)
-{
-if($Val)
-{
-$dateLargeInt = $Val; // nano seconds since jan 1st 1601
-$secsAfterADEpoch = $dateLargeInt / (10000000); // seconds since jan 1st 1601
-$ADToUnixConvertor=((1970-1601) * 365.242190) * 86400; // unix epoch - AD epoch * number of tropical days * seconds in a day
-$unixTsLastLogon=intval($secsAfterADEpoch-$ADToUnixConvertor); // unix Timestamp version of AD timestamp
-$lastlogon=date("Y-m-d", $unixTsLastLogon); // formatted date
-
-return $lastlogon;
-}
-else
-return "x";
-}
-
-
-
-
-
-
-
 
 	//Возвращает массив
 	//первый элемент 'bookmark' - массив со ссылками вкладок, которые должны показаться в данной ситуации

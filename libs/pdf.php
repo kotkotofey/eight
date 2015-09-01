@@ -13,7 +13,7 @@ abstract Class PDF
 		<td id=\"second_life\">".$GLOBALS['PDF_SECOND_LINE']."</td>
 		</tr>
 		<tr>
-		<td id=\"create_date\">Справочник создан: ".date("d.m.Y")."</td>
+		<td id=\"create_date\">Довідник створено: ".date("d.m.Y")."</td>
 		</tr>
 		</table>";
 	}

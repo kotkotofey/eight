@@ -154,7 +154,7 @@ class LDAPTable
 		}		
 		
 	
-	//ÐŸÐµÑ‡Ð°Ñ‚Ð°ÐµÑ‚ ÑˆÐ°Ð¿ÐºÑƒ Ñ‚Ð°Ð±Ð»Ð¸Ñ†Ñ‹
+	//Ïå÷àòàåò øàïêó òàáëèöû
 	private function printHead()
 		{
 		//$ADAttributes=array_values($this->Attributes[name]);
@@ -205,7 +205,7 @@ class LDAPTable
 		{
 		$BaseDN=iconv($GLOBALS['CHARSET_APP'], $GLOBALS['CHARSET_DATA'], $BaseDN);
 		$Filter=iconv($GLOBALS['CHARSET_APP'], $GLOBALS['CHARSET_DATA'], $Filter);
-		$ADAttributes=array_values($this->Attributes['name']); //Ð£Ð±Ñ€Ð°Ñ‚ÑŒ Ð´ÑƒÐ±Ð»Ð¸Ñ€Ð¾Ð²Ð°Ð½Ð¸Ðµ
+		$ADAttributes=array_values($this->Attributes['name']); //Óáðàòü äóáëèðîâàíèå
 		foreach($ADAttributes AS $V)
 			{
 			if(strpos($V, ","))
@@ -226,7 +226,7 @@ class LDAPTable
 			if($Entries['count']&&$this->Head)
 				{self::printHead();}
 				
-			//Ð¡Ð¾Ñ€Ñ‚Ð¸Ñ€Ð¾Ð²ÐºÐ°
+			//Ñîðòèðîâêà
 			//-----------------------------------------------------------------------------
 			if($this->SortColumn)
 				{
@@ -341,7 +341,7 @@ class LDAPTable
 
 					//-----------------------------------------------------------------------------	
 
-					//ÐŸÑ€Ð¾Ð²ÐµÑ€ÐºÐ° Ð¿Ñ€Ð¸Ð¼ÐµÐ½Ð¸Ð¼Ð¾ÑÑ‚Ð¸ Ð·Ð°Ð¼ÐµÐ½Ñ‹ Ð½Ð° Ñ€ÐµÐ³. Ð²Ñ‹Ñ€Ð°Ð¶ÐµÐ½Ð¸ÑÑ…
+					//Ïðîâåðêà ïðèìåíèìîñòè çàìåíû íà ðåã. âûðàæåíèÿõ
 					//-----------------------------------------------------------------------------				
 					if(is_array(@$this->PregReplace[$this->Attributes[title][$j]]['conditions']))
 						{						

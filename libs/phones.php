@@ -18,10 +18,11 @@ function get_phone_attr($phone = '', $convert = true, $trim = true)
     // очистка от лишнего мусора с сохранением информации о "плюсе" в начале номера
     $phone=trim($phone);
     $plus = ($phone[0] == '+');
-	$OriginalPhone = preg_replace("/[^0-9A-Za-z_-\s]/u", "", $phone); /* оригинальное форматирование номера */
-    $phone = preg_replace("/[^0-9A-Za-z]/u", "", $phone);
-    
+//	$OriginalPhone = preg_replace("/[^0-9A-Za-z_-\s]/u", "", $phone); /* оригинальное форматирование номера //*/
+//    $phone = preg_replace("/[^0-9A-Za-z]/u", "", $phone);
 
+
+    
     // конвертируем буквенный номер в цифровой
     if ($convert == true && !is_numeric($phone)) {
         $replace = array('2'=>array('a','b','c'),
@@ -80,7 +81,11 @@ function get_phone_attr($phone = '', $convert = true, $trim = true)
             }
 
             // возвращаем результат
-            $PhoneAttr['format_phone']=($plus ? "+" : "").$countryCode.'('.$cityCode.')'.phoneBlocks($phone, $GLOBALS['FORMAT_PHONE_BLOCKLEN']);
+
+
+		// я добавил брейк <br/>'
+
+            $PhoneAttr['format_phone']=($plus ? "+" : "").$countryCode.'('.$cityCode.')<br/>'.phoneBlocks($phone, $GLOBALS['FORMAT_PHONE_BLOCKLEN']);
             $PhoneAttr['clear_phone']=($plus ? "+" : "").$countryCode.$cityCode.$phone;
 			$PhoneAttr['original_phone']=$OriginalPhone;
 			if ( array_key_exists($countryCode, $GLOBALS['PROVIDER_DESC']) AND array_key_exists($cityCode, $GLOBALS['PROVIDER_DESC'][$countryCode]) )
