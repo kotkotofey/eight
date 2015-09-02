@@ -1,0 +1,37 @@
+AD Users and Computers Extension
+
+Add a User Profile Picture in Active Directory
+--------------------------------
+By Oli Dewdney ojd-ad@dewdney.co.uk
+
+Installation:
+-------------
+
+copy the file to somewhere 'global'
+use .Net's InstallUtil to register the DLL:
+
+C:\Windows\Microsoft.NET\Framework\v2.0.50727\InstallUtil.exe adExt.dll
+
+or the 64-bit version if your OS is 64-bit:
+
+C:\Windows\Microsoft.NET\Framework64\v2.0.50727\InstallUtil.exe adExt.dll
+
+(you need permission to write to the directory where adext.dll is and to the registry HKLM\Software\microsoft\MMC)
+
+
+use the /u flag to uninstall.
+
+if the install fails with a could not load assembly error try running mmcperf.exe that will register the MMC assemblies in the GAC.
+
+
+Use
+---
+
+This extension adds two tabs to the User Property Sheet. One allows you to view/edit the EmployeeID and EmployeeNumber
+AD fields and the other to edit/view the jpegPhoto and thumbnailPhoto fields.
+
+When loading the thumbnailPhoto Field, the image is resampled down to  96 x 96, and the jpeg quality is chosen to have the size < 10KB
+
+when loading the jpegPhoto the image jpeg quality is reduced to have the size < 100KB.
+
+the fields are not editable if you dont have write access for the field.
